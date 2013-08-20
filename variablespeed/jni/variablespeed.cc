@@ -249,12 +249,13 @@ static void ReadSampleRateAndChannelCount(CallbackContext *pContext,
         if (value) {
           OpenSL(decoderMetadata, GetValue, i, valueSize, value);
           if (strcmp((char*) keyInfo->data, ANDROID_KEY_PCMFORMAT_SAMPLERATE) == 0) {
-            SLuint32 sampleRate = *(reinterpret_cast<SLuint32*>(value->data));
+            SLuint32 sampleRate;
+            memcpy(&sampleRate, value->data, sizeof(SLuint32));
             LOGD("sample Rate: %d", sampleRate);
             *sampleRateOut = sampleRate;
           } else if (strcmp((char*) keyInfo->data, ANDROID_KEY_PCMFORMAT_NUMCHANNELS) == 0) {
-            SLuint32 channels = *(reinterpret_cast<SLuint32*>(value->data));
-            LOGD("channels: %d", channels);
+            SLuint32 channels;
+            memcpy(&channels, value->data, sizeof(SLuint32));
             *channelsOut = channels;
           }
           free(value);
